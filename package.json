@@ -1,0 +1,38 @@
+{
+	"title": "iDeviceTool",
+	"name": "idevicetool",
+	"version": "1.0.0",
+	"main": "index.js",
+	"dependencies": {},
+	"devDependencies": {
+		"electron": "^3.0.8"
+	},
+	"extraResources": ["bin/**/*"],
+	"extraFiles": ["bin/**/*"],
+	"scripts": {
+		"start": "killall Electron; electron .",
+		"pack": "killall Electron; electron-builder --dir",
+		"dist": "killall Electron; electron-builder"
+	},
+	"build": {
+		"extraResources": ["bin/**/*"],
+		"extraFiles": ["bin/**/*"],
+		"appId": "idevicetool",
+		"mac": {
+			"category": "Utility"
+		},
+		"win": {
+			"target": [
+				{
+					"target": "nsis",
+					"arch": [
+						"x64"
+					]
+				}
+			]
+		}
+	},
+	"nodeGypRebuild": true,
+	"author": "iPhoneGuy1101",
+	"description": "iDeviceTool - ASR Patcher, ramdisk and rootFS management, (ha)activation, and restore features, all-in-one!"
+}

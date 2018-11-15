@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>iDeviceTool</title>
+	<link rel='stylesheet' href='../css/main.css' />
+	<script>
+		// Error handler for beta testing
+		window.onerror = function onerror() {
+			console.log(Array.from(arguments).join('\n'))
+		};
+	</script>
+	<script>
+		let {ipcRenderer} = require('electron');
+		ipcRenderer.on('command-res-b', function callback(evt, res) {
+			console.log(res);
+		});
+		function activate(url = "https://albert.apple.com/deviceservices/deviceActivation") {
+			ipcRenderer.send('command-req-b', "ideviceactivation -d -s " + url + " activate");
+			console.log("ideviceactivation -d -s " + url + " activate");
+		};
+	</script>
+</head>
+<body>
+	<div id='title'>activate device</div>
+	<input class='button' type="text" id="svr" value='https://albert.apple.com/deviceservices/deviceActivation' style="width: 86vw; margin-left: 0; left: 7vw; position: relative" />
+	<div class='button' onclick='activate($("#svr")[0].value)' style="width: 86vw; margin-left: 0; left: 7vw; position: relative">Attempt To Activate</div>
+	<script id='footer' src='../js/global.js'></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>iDeviceTool</title>
+	<link rel='stylesheet' href='../css/main.css' />
+	<script>
+		// Error handler for beta testing
+		window.onerror = function onerror() {
+			console.log(Array.from(arguments).join('\n'))
+		};
+	</script>
+	<script>
+		const {ipcRenderer} = require('electron');
+		let command = "??";
+		ipcRenderer.on('command-res', function res(event, response) {
+			console.log(response);
+			if(response.toString().toLowerCase().includes("is signed")) {
+				alert("Success! Saved to your Desktop! Keep these safe.");
+				ipcRenderer.send('command-req-b', "mv *.shsh2 ~/Desktop")
+				console.log("mv *.shsh2 ~/Desktop")
+			} else if(response.toString().toLowerCase().includes("is not signed")){
+				alert("Error! That firmware is NOT signed. This means you missed the signing window :/");
+			} else {
+				alert(response);
+			};
+		});
+		ipcRenderer.on('command-res-b', function res(event, response) {
+			console.log(response);
+		});
+		function getSHSH(device = 'iPad1,1', version = '5.1.1', ecid = '1', additionalArgs) {
+			ipcRenderer.send('command-req', command = "${BIN}/tsschecker | --apnonce 7ce1657233867e988e1b48988ef98fc28ddf20f5 --save-path ./ --save " + additionalArgs + " -d " + device + " -i " + version + " -e " + ecid);
+		};
+	</script>
+</head>
+<body>
+	<div id='title'>save shsh</div>
+	<input class='button' type="text" id="dvc" placeholder='iPad1,1' />
+	<input class='button' type="text" id="ver" placeholder='5.1.1' />
+	<input class='button' type="text" id="ecd" placeholder='1' style="width: 86vw; margin-left: 0; left: 7vw; position: relative" />
+	<div class='button' onclick='getSHSH($("#dvc")[0].value, $("#ver")[0].value, $("#ecd")[0].value, "")'>Get SHSH</div>
+	<div class='button' onclick='getSHSH($("#dvc")[0].value, $("#ver")[0].value, $("#ecd")[0].value, "--ota")'>Get OTA SHSH</div>
+	<script id='footer' src='../js/global.js'></script>
+</body>
+</html>
